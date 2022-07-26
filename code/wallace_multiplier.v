@@ -80,16 +80,16 @@ module wallace_multiplier(
 		carry_save_adder fal2 (L3pProd[0],L3pProd[1],L3pProd[2],L2pProd[0],L2pProd[1]);
 
 		// level = 1
-			//wire ignore_carry = 0;
-			//n_bit_full_adder #(16) nbifa (L2pProd[0],L2pProd[1],Prod,ignore_carry);
+		wire ignore_carry;
+		n_bit_full_adder #(32) nbifa (L2pProd[0],L2pProd[1],Prod,ignore_carry);
 
-		assign Prod = L2pProd[0] + L2pProd[1];
+		//assign Prod = L2pProd[0] + L2pProd[1];
 
 endmodule
 
 
 
-/*
+
 module full_adder(
 	input a,b,cin,
 	output sum,cout
@@ -102,30 +102,31 @@ module half_adder(
 	output sum,cout
 );
 	assign {cout,sum} = a + b;
-endmodule*/
-/*
+endmodule
+
 module n_bit_full_adder #(parameter WIDTH = 16)(
 	input [WIDTH - 1 : 0] A,B,
-	output reg [WIDTH - 1 : 0] SUM,
+	output wire [WIDTH - 1 : 0] SUM,
 	output COUT
 );
-
+	wire [WIDTH -1 : 0] SUM_REG;
 	wire [WIDTH : 1]cout;
 	//integer i;
 	
-	half_adder HA (A[0],B[0],0,SUM[0],cout[1]);
+	half_adder HA (A[0],B[0],SUM_REG[0],cout[1]);
 	genvar i;
 	generate
 		
 		for (i = 1; i < WIDTH; i = i + 1) 
 		begin : full_add
-			full_adder FA (A[i],B[i],cout[i],SUM[i],cout[i+1]);
+			full_adder FA (A[i],B[i],cout[i],SUM_REG[i],cout[i+1]);
 		end
 	endgenerate
 
 	assign COUT = cout[WIDTH];
+	assign SUM  = SUM_REG;
 
-endmodule*/
+endmodule
 
 	/*
 		if i = 4
